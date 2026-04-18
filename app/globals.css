@@ -1,26 +1,177 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --green: #00ff88;
+  --green-dim: #00cc6a;
+  --red: #ff3355;
+  --amber: #ffaa00;
+  --bg: #050d0a;
+  --bg2: #081210;
+  --border: rgba(0, 255, 136, 0.15);
+  --border-strong: rgba(0, 255, 136, 0.35);
+  --text-dim: #5a9975;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: #b0ffd4;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* Scanlines overlay — gives the retro CRT monitor look */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Grid background — like a hacker's map */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ticker scroll animation */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker 28s linear infinite;
+}
+
+/* Cursor blink in terminal */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.animate-cursor {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* Status dot pulse */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+/* Meter fill — bars animate in on load */
+@keyframes fill-in {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.animate-fill {
+  animation: fill-in 1.5s ease forwards;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.animate-fill-delay-1 {
+  animation: fill-in 1.5s ease 0.15s forwards;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.animate-fill-delay-2 {
+  animation: fill-in 1.5s ease 0.3s forwards;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.animate-fill-delay-3 {
+  animation: fill-in 1.5s ease 0.45s forwards;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* Fade-in-up for hero content */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up   { animation: fade-up 0.7s ease 0.1s both; }
+.animate-fade-up-2 { animation: fade-up 0.7s ease 0.25s both; }
+.animate-fade-up-3 { animation: fade-up 0.7s ease 0.4s both; }
+.animate-fade-up-4 { animation: fade-up 0.7s ease 0.55s both; }
+
+/* Clip-path chamfer for buttons (cut corner look) */
+.btn-chamfer {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+/* Glitch title effect */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.glitch::before {
+  color: #ff3355;
+  clip-path: polygon(0 15%, 100% 15%, 100% 30%, 0 30%);
+  animation: glitch-a 5s infinite 2s;
+  opacity: 0;
+}
+
+.glitch::after {
+  color: #00f5ff;
+  clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+  animation: glitch-b 5s infinite 2.1s;
+  opacity: 0;
+}
+
+@keyframes glitch-a {
+  0%, 88%, 100% { opacity: 0; transform: translate(0); }
+  90%  { opacity: 0.8; transform: translate(-3px, 0); }
+  92%  { opacity: 0; }
+  94%  { opacity: 0.6; transform: translate(3px, 0); }
+  96%  { opacity: 0; }
+}
+
+@keyframes glitch-b {
+  0%, 88%, 100% { opacity: 0; transform: translate(0); }
+  90%  { opacity: 0.8; transform: translate(3px, 0); }
+  92%  { opacity: 0; }
+  94%  { opacity: 0.6; transform: translate(-3px, 0); }
+  96%  { opacity: 0; }
 }
